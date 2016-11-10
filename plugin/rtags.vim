@@ -97,6 +97,7 @@ if g:rtagsUseDefaultMappings == 1
     noremap <Leader>rC :call rtags#FindSuperClasses()<CR>
     noremap <Leader>rc :call rtags#FindSubClasses()<CR>
     noremap <Leader>rd :call rtags#Diagnostics()<CR>
+    noremap <Leader>rm :call rtags#FindPathsByName(input("Pattern? ", "", "customlist,rtags#CompleteSymbols"))<CR>
 endif
 
 let s:script_folder_path = escape( expand( '<sfile>:p:h' ), '\' )
@@ -832,6 +833,22 @@ function! rtags#FindSubClasses()
     let result = rtags#ExecuteThen({ '--class-hierarchy' : rtags#getCurrentLocation() }, [
                 \ function('rtags#ExtractSubClasses'),
                 \ function('rtags#DisplayResults')])
+endfunction
+
+function! rtags#FindPathsByName(name)
+    let args = {
+                \ '--path' : a:name,
+                \ '-I' : '' }
+
+    let result = rtags#ExecuteRC(args)
+    let pathslinescols = []
+    for path in result
+        let matches = matchstr(path, '\.[ch]\(pp\)\?$') " cpp, hpp, c and h only
+        if matches != ''
+            call add(pathslinescols, path . ":1:1: #") " # for the trailing whitespace
+        endif
+    endfor
+    call rtags#DisplayResults(pathslinescols)
 endfunction
 
 function! rtags#FindVirtuals()
