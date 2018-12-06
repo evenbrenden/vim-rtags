@@ -843,7 +843,7 @@ function! rtags#FindPathsByName(name)
     let result = rtags#ExecuteRC(args)
     let pathslinescols = []
     for path in result
-        let matches = matchstr(path, '\.\(c|h|cpp\|hpp\)$') " filter file extensions
+        let matches = matchstr(path, '\.[ch]\(pp\)\?$') " cpp, hpp, c and h only
         if matches != ''
             call add(pathslinescols, path . ":1:1: *") " pad trailing whitespace
         endif
