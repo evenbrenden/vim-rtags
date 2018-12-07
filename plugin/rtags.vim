@@ -98,6 +98,8 @@ if g:rtagsUseDefaultMappings == 1
     noremap <Leader>rc :call rtags#FindSubClasses()<CR>
     noremap <Leader>rd :call rtags#Diagnostics()<CR>
     noremap <Leader>rm :call rtags#FindPathsByName(input("Pattern? ", "", "customlist,rtags#CompleteSymbols"))<CR>
+    noremap <Leader>rq :call rtags#FindRefsOfWordUnderCursor()<CR>
+    noremap <Leader>ra :call rtags#FindSymbolsOfWordUnderCursor()<CR>
 endif
 
 let s:script_folder_path = escape( expand( '<sfile>:p:h' ), '\' )
